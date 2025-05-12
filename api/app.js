@@ -23,7 +23,7 @@ async function conectarMongoBBDD() {
     console.log("Conectado a MongoDB Atlas");
     const db = client.db('hospital');
     login = db.collection('usuarios');
-    citas = db.collection('mangas');
+    citas = db.collection('citas');
     pacientes = db.collection('pacientes');
     especialistas = db.collection('especialista');
   } catch (error) {
