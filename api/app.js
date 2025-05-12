@@ -56,7 +56,7 @@ app.get('/api/citas', async (req, res) => {
     const lista_citas = await citas.find().toArray();
     res.json(lista_citas);
   } catch (error) {
-    res.status(500).json({ error: 'Error al obtener los mangas' });
+    res.status(500).json({ error: 'Error al obtener las citas' });
   }
 });
 
@@ -66,7 +66,7 @@ app.get('/api/pacientes', async (req, res) => {
     const lista_pacientes = await pacientes.find().toArray();
     res.json(lista_pacientes);
   } catch (error) {
-    res.status(500).json({ error: 'Error al obtener los mangas' });
+    res.status(500).json({ error: 'Error al obtener los pacientes' });
   }
 });
 
@@ -76,7 +76,7 @@ app.get('/api/especialistas', async (req, res) => {
     const lista_especialistas = await especialistas.find().toArray();
     res.json(lista_especialistas);
   } catch (error) {
-    res.status(500).json({ error: 'Error al obtener los mangas' });
+    res.status(500).json({ error: 'Error al obtener los especialistas' });
   }
 });
 
