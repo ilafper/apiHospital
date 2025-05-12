@@ -31,7 +31,7 @@ async function conectarMongoBBDD() {
   try {
     await client.connect();
     console.log("Conectado a MongoDB Atlas");
-    const db = client.db('tfc');
+    const db = client.db('hospital');
     login = db.collection('usuarios');
     citas = db.collection('mangas');
     pacientes = db.collection('pacientes');
