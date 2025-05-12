@@ -84,4 +84,37 @@ app.get('/api/especialistas', async (req, res) => {
   }
 });
 
+// parte para encontrar al usuario del login
+app.post('/api/checkLogin', async (req, res) => {
+  try {
+    const { nombre, password } = req.body;
+    
+    // Conectar a la base de datos y acceder a la colección
+    const { login } = await connectToMongoDB();
+
+    // Buscar al usuario por nombre y contraseña
+    const usuarioEncontrado = await login.findOne({ usuario: nombre, contra: password });
+
+    if (usuarioEncontrado) {
+      const rol = usuarioEncontrado.rol;
+      if (rol === "admin") {
+        res.json({ mensaje: "Bienvenido administrador", rol: "admin" });
+      } else if (rol === "administrativo") {
+        res.json({ mensaje: "Bienvenido administrativo", rol: "administrativo" });
+      } else {
+        res.status(400).json({ mensaje: "Rol no reconocido" });
+      }
+    } else {
+      res.status(401).json({ mensaje: "Nombre o contraseña incorrecta" });
+    }
+
+  } catch (error) {
+    console.error("Error en checkLogin:", error);
+    res.status(500).json({ mensaje: "Error interno del servidor" });
+  }
+});
+
+
+
+
 module.exports = app;
