@@ -3,7 +3,7 @@ const { MongoClient, ServerApiVersion } = require('mongodb');
 const app = express();
 app.use(express.json());
 
-// Conectar con MongoDB
+// Configura la conexión a MongoDB
 const uri = "mongodb+srv://ialfper:ialfper21@alumnos.zoinj.mongodb.net/alumnos?retryWrites=true&w=majority";
 const client = new MongoClient(uri, {
   serverApi: {
@@ -13,50 +13,48 @@ const client = new MongoClient(uri, {
   }
 });
 
-let login;
-let citas;
-let pacientes;
-let especialistas;
-async function conectarMongoBBDD() {
+// Función para conectar a la base de datos y obtener las colecciones
+async function connectToMongoDB() {
   try {
     await client.connect();
     console.log("Conectado a MongoDB Atlas");
     const db = client.db('hospital');
-    login = db.collection('usuarios');
-    citas = db.collection('citas');
-    pacientes = db.collection('pacientes');
-    especialistas = db.collection('especialista');
+    return {
+      login: db.collection('usuarios'),
+      citas: db.collection('citas'),
+      pacientes: db.collection('pacientes'),
+      especialistas: db.collection('especialista')
+    };
   } catch (error) {
     console.error("Error al conectar a MongoDB:", error);
+    throw new Error('Error al conectar a la base de datos');
   }
 }
 
-conectarMongoBBDD();
-
 app.use((req, res, next) => {
-  res.setHeader('Access-Control-Allow-Origin', '*');  // Dominio del frontend
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');  // Métodos permitidos
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');  // Cabeceras permitidas
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
   next();
 });
 
 // Endpoint GET para obtener usuarios
 app.get('/api/users', async (req, res) => {
   try {
-    console.log("Obteniendo lista de usuarios...");  // Confirmación de que se está intentando obtener los usuarios
+    const { login } = await connectToMongoDB();
     const lista_login = await login.find().toArray();
-    console.log("Usuarios obtenidos:", lista_login);  // Ver los usuarios obtenidos
+    console.log("Usuarios obtenidos:", lista_login);
     res.json(lista_login);
   } catch (error) {
-    console.error("Error al obtener los usuarios:", error);  // Información detallada del error
+    console.error("Error al obtener los usuarios:", error);
     res.status(500).json({ error: 'Error al obtener los usuarios' });
   }
 });
 
-
-
+// Endpoint GET para obtener citas
 app.get('/api/citas', async (req, res) => {
   try {
+    const { citas } = await connectToMongoDB();
     const lista_citas = await citas.find().toArray();
     res.json(lista_citas);
   } catch (error) {
@@ -64,9 +62,10 @@ app.get('/api/citas', async (req, res) => {
   }
 });
 
-
+// Endpoint GET para obtener pacientes
 app.get('/api/pacientes', async (req, res) => {
   try {
+    const { pacientes } = await connectToMongoDB();
     const lista_pacientes = await pacientes.find().toArray();
     res.json(lista_pacientes);
   } catch (error) {
@@ -74,17 +73,15 @@ app.get('/api/pacientes', async (req, res) => {
   }
 });
 
-
+// Endpoint GET para obtener especialistas
 app.get('/api/especialistas', async (req, res) => {
   try {
+    const { especialistas } = await connectToMongoDB();
     const lista_especialistas = await especialistas.find().toArray();
     res.json(lista_especialistas);
   } catch (error) {
     res.status(500).json({ error: 'Error al obtener los especialistas' });
   }
 });
-
-
-
 
 module.exports = app;
