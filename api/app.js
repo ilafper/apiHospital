@@ -41,7 +41,7 @@ app.use((req, res, next) => {
 });
 
 // Endpoint GET para obtener usuarios
-app.get('/api/login', async (req, res) => {
+app.get('/api/users', async (req, res) => {
   try {
     const lista_login = await login.find().toArray();
     res.json(lista_login);
