@@ -114,7 +114,4 @@ app.post('/api/checkLogin', async (req, res) => {
   }
 });
 
-
-
-
 module.exports = app;
