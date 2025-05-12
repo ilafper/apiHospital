@@ -83,5 +83,10 @@ app.get('/api/especialistas', async (req, res) => {
   }
 });
 
+
+
+
+app.use(middlewares.notFound);
+app.use(middlewares.errorHandler);
 // Exporta la app para usarla en otros archivos
 module.exports = app;
