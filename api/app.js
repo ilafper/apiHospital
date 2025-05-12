@@ -35,7 +35,7 @@ async function conectarMongoBBDD() {
     login = db.collection('usuarios');
     citas = db.collection('mangas');
     pacientes = db.collection('pacientes');
-    especialistas = db.collection('especialistas');
+    especialistas = db.collection('especialista');
   } catch (error) {
     console.error("Error al conectar a MongoDB:", error);
   }
