@@ -6,8 +6,8 @@ const { MongoClient, ServerApiVersion } = require('mongodb');
 require('dotenv').config();
 
 const middlewares = require('./middlewares');
-const app = express();
-
+const app = require("./app");
+const serverless = require("serverless-http");
 app.use(morgan('dev'));
 app.use(helmet());
 app.use(cors());
@@ -89,4 +89,4 @@ app.get('/api/especialistas', async (req, res) => {
 app.use(middlewares.notFound);
 app.use(middlewares.errorHandler);
 // Exporta la app para usarla en otros archivos
-module.exports = app;
+module.exports.handler = serverless(app);
