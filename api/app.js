@@ -43,12 +43,16 @@ app.use((req, res, next) => {
 // Endpoint GET para obtener usuarios
 app.get('/api/users', async (req, res) => {
   try {
+    console.log("Obteniendo lista de usuarios...");  // Confirmación de que se está intentando obtener los usuarios
     const lista_login = await login.find().toArray();
+    console.log("Usuarios obtenidos:", lista_login);  // Ver los usuarios obtenidos
     res.json(lista_login);
   } catch (error) {
+    console.error("Error al obtener los usuarios:", error);  // Información detallada del error
     res.status(500).json({ error: 'Error al obtener los usuarios' });
   }
 });
+
 
 
 app.get('/api/citas', async (req, res) => {
