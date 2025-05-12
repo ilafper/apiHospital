@@ -1,7 +1,4 @@
-// api/index.js
-const app = require('./app'); // Importa la app desde app.js
-const port = process.env.PORT || 5000;
+const serverless = require("serverless-http");
+const app = require("./app");
 
-app.listen(port, () => {
-  console.log(`Servidor escuchando en http://localhost:${port}`);
-});
+module.exports = serverless(app);
