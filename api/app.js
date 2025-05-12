@@ -1,16 +1,6 @@
 const express = require('express');
-const morgan = require('morgan');
-const helmet = require('helmet');
-const cors = require('cors');
 const { MongoClient, ServerApiVersion } = require('mongodb');
-require('dotenv').config();
-
-const middlewares = require('./middlewares');
 const app = express();
-
-app.use(morgan('dev'));
-app.use(helmet());
-app.use(cors());
 app.use(express.json());
 
 // Conectar con MongoDB
@@ -42,6 +32,13 @@ async function conectarMongoBBDD() {
 }
 
 conectarMongoBBDD();
+
+app.use((req, res, next) => {
+  res.setHeader('Access-Control-Allow-Origin', '*');  // Dominio del frontend
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');  // Métodos permitidos
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');  // Cabeceras permitidas
+  next();
+});
 
 // Endpoint GET para obtener usuarios
 app.get('/api/login', async (req, res) => {
@@ -86,7 +83,4 @@ app.get('/api/especialistas', async (req, res) => {
 
 
 
-app.use(middlewares.notFound);
-app.use(middlewares.errorHandler);
-// Exporta la app para usarla en otros archivos
 module.exports = app;
