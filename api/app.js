@@ -112,6 +112,39 @@ app.post('/api/checkLogin', async (req, res) => {
     console.error("Error en checkLogin:", error);
     res.status(500).json({ mensaje: "Error interno del servidor" });
   }
+
 });
+
+
+// Endpoint POST para crear un nuevo especialista
+app.post('/api/especialistas', async (req, res) => {
+  try {
+    const { username, apellido, direccion, especialidad } = req.body;
+
+    // Validación básica
+    if (!username || !apellido || !direccion || !especialidad) {
+      return res.status(400).json({ mensaje: "Todos los campos son obligatorios" });
+    }
+
+    // Conectar a la base de datos y acceder a la colección
+    const { especialistas } = await connectToMongoDB();
+
+    // Crear el nuevo especialista
+    const nuevoEspecialista = {
+      username,
+      apellido,
+      direccion,
+      especialidad
+    };
+
+    await especialistas.insertOne(nuevoEspecialista);
+
+    res.status(201).json({ mensaje: "Especialista creado correctamente" });
+  } catch (error) {
+    console.error("Error al crear el especialista:", error);
+    res.status(500).json({ mensaje: "Error al crear el especialista" });
+  }
+});
+
 
 module.exports = app;
