@@ -160,10 +160,10 @@ app.post('/api/crearPaciente', async (req, res) => {
 
     // Crear el nuevo especialista
     const nuevoPaciente = {
-      nombre,
-      apellido,
-      direccion,
-      telefono
+      usernamePaciente,
+      apellidoPaciente,
+      direccionPaciente,
+      telefonoPaciente
     };
 
     await pacientes.insertOne(nuevoPaciente);
