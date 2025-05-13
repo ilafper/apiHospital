@@ -117,7 +117,7 @@ app.post('/api/checkLogin', async (req, res) => {
 
 
 // Endpoint POST para crear un nuevo especialista
-app.post('/api/CrearEspecialistas', async (req, res) => {
+app.post('/api/crearEspecialistas', async (req, res) => {
   try {
     const { username, apellido, direccion, especialidad } = req.body;
 
