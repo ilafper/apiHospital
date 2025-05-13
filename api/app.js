@@ -88,7 +88,7 @@ app.get('/api/especialistas', async (req, res) => {
 app.post('/api/checkLogin', async (req, res) => {
   try {
     const { nombre, password } = req.body;
-    
+
     // Conectar a la base de datos y acceder a la colección
     const { login } = await connectToMongoDB();
 
@@ -160,10 +160,10 @@ app.post('/api/crearPaciente', async (req, res) => {
 
     // Crear el nuevo especialista
     const nuevoPaciente = {
-      nombre:usernamePaciente,
-      apellido:apellidoPaciente,
-      direccion:direccionPaciente,
-      telefono:telefonoPaciente
+      nombre: usernamePaciente,
+      apellido: apellidoPaciente,
+      direccion: direccionPaciente,
+      telefono: telefonoPaciente
     };
 
     await pacientes.insertOne(nuevoPaciente);
@@ -172,6 +172,34 @@ app.post('/api/crearPaciente', async (req, res) => {
   } catch (error) {
     console.error("Error al crear el especialista:", error);
     res.status(500).json({ mensaje: "Error al crear el especialista" });
+  }
+});
+
+/*ASIGNAR CITA LA PACIENTE */
+
+app.post('/api/asignarCita', async (req, res) => {
+  try {
+    const { codigoPaciente, nombrePaciente, fecha } = req.body;
+
+    if (!codigoPaciente || !nombrePaciente || !fecha) {
+      return res.status(400).json({ mensaje: 'Faltan datos requeridos' });
+    }
+
+    const { citas } = await connectToMongoDB();
+
+    const nuevaCita = {
+      codigo:codigoPaciente,
+      nombre:nombrePaciente,
+      fecha:fecha,
+      asistio: 'pendiente'
+    };
+
+    await citas.insertOne(nuevaCita);
+
+    res.status(201).json({ mensaje: 'Cita asignada exitosamente' });
+  } catch (error) {
+    console.error('Error al asignar cita:', error);
+    res.status(500).json({ mensaje: 'Error al asignar la cita' });
   }
 });
 
