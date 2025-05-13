@@ -146,5 +146,34 @@ app.post('/api/crearEspecialistas', async (req, res) => {
   }
 });
 
+app.post('/api/crearPaciente', async (req, res) => {
+  try {
+    const { usernamePaciente, apellidoPaciente, direccionPaciente, telefonoPaciente } = req.body;
+
+    // Validación básica
+    if (!usernamePaciente || !apellidoPaciente || !direccionPaciente || !telefonoPaciente) {
+      return res.status(400).json({ mensaje: "Todos los campos son obligatorios" });
+    }
+
+    // Conectar a la base de datos y acceder a la colección
+    const { pacientes } = await connectToMongoDB();
+
+    // Crear el nuevo especialista
+    const nuevoPaciente = {
+      usernamePaciente,
+      apellidoPaciente,
+      direccionPaciente,
+      telefonoPaciente
+    };
+
+    await pacientes.insertOne(nuevoPaciente);
+
+    res.status(201).json({ mensaje: "Especialista creado correctamente" });
+  } catch (error) {
+    console.error("Error al crear el especialista:", error);
+    res.status(500).json({ mensaje: "Error al crear el especialista" });
+  }
+});
+
 
 module.exports = app;
