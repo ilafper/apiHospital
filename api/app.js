@@ -188,8 +188,8 @@ app.post('/api/asignarCita', async (req, res) => {
     const { citas } = await connectToMongoDB();
 
     const nuevaCita = {
-      codigo:codigoPaciente,
-      nombre:nombrePaciente,
+      codigoPaciente:codigoPaciente,
+      nombrePaciente:nombrePaciente,
       fecha:fecha,
       asistio: 'pendiente'
     };
