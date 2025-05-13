@@ -179,29 +179,37 @@ app.post('/api/crearPaciente', async (req, res) => {
 
 app.post('/api/asignarCita', async (req, res) => {
   try {
+    // Desestructurar los valores del body de la solicitud
     const { codigoPaciente, nombrePaciente, fecha } = req.body;
 
+    // Verificar si los valores requeridos existen
     if (!codigoPaciente || !nombrePaciente || !fecha) {
       return res.status(400).json({ mensaje: 'Faltan datos requeridos' });
     }
 
+    // Conectar a la base de datos
     const { citas } = await connectToMongoDB();
 
+    // Crear el nuevo objeto de cita
     const nuevaCita = {
-      codigoPaciente:codigoPaciente,
-      nombrePaciente:nombrePaciente,
-      fecha:fecha,
-      asistio: 'pendiente'
+      codigoPaciente: codigoPaciente,
+      nombrePaciente: nombrePaciente,
+      fecha: fecha,
+      asistio: 'pendiente' // Por defecto la cita está pendiente
     };
 
+    // Insertar la cita en la base de datos
     await citas.insertOne(nuevaCita);
 
+    // Enviar respuesta exitosa
     res.status(201).json({ mensaje: 'Cita asignada exitosamente' });
   } catch (error) {
+    // Manejo de errores
     console.error('Error al asignar cita:', error);
     res.status(500).json({ mensaje: 'Error al asignar la cita' });
   }
 });
+
 
 
 module.exports = app;
