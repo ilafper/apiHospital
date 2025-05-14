@@ -181,43 +181,29 @@ app.post('/api/asignarCita', async (req, res) => {
   try {
     const { nombre, apellido, codigoPaciente, fecha } = req.body;
 
-    // 1. Validación básica
-    if (!ObjectId.isValid(codigoPaciente)) { // ✅ Método moderno para validar IDs
-      return res.status(400).json({ mensaje: 'ID de paciente inválido' });
+    // Validación de campos requeridos
+    if (!nombre || !apellido || !codigoPaciente || !fecha) {
+      return res.status(400).json({ mensaje: 'Todos los campos son obligatorios' });
     }
 
-    const pacientes = req.db.collection('pacientes');
-    const citas = req.db.collection('citas');
+    const { citas } = await connectToMongoDB();
 
-    // 2. Buscar paciente (con ObjectId convertido correctamente)
-    
-
-    if (!paciente) {
-      return res.status(404).json({ mensaje: 'Paciente no encontrado' });
-    }
-
-    // 3. Crear cita (con fecha convertida a Date)
+    const junto = nombre + " " + apellido;
     const nuevaCita = {
-      codigoPaciente: new ObjectId(codigoPaciente), // ✅ Correcto
-      nombrePaciente: `${nombre} ${apellido}`,
-      fecha: new Date(fecha),
-      estado: "pendiente",
-      createdAt: new Date() // 👈 Buena práctica: fecha de creación
+      codigoPaciente: codigoPaciente,
+      Paciente: junto,
+      fecha: fecha,
+      asistio: "pendiente"
     };
 
-    const resultado = await citas.insertOne(nuevaCita);
+    await citas.insertOne(nuevaCita);
 
-    res.status(201).json({
-      mensaje: 'Cita creada exitosamente',
-      id: resultado.insertedId // 👈 Devuelve el ID generado
-    });
+    
+    res.status(201).json({ mensaje: 'Cita asignada correctamente', cita: nuevaCita });
 
   } catch (error) {
-    console.error('Error detallado:', error);
-    res.status(500).json({ 
-      mensaje: 'Error al crear cita',
-      error: error.message // 👈 Devuelve el mensaje de error real
-    });
+    console.error("Error al asignar la cita:", error);
+    res.status(500).json({ mensaje: 'Error al asignar la cita' });
   }
 });
 
