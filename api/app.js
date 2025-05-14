@@ -2,7 +2,6 @@ const express = require('express');
 const { MongoClient, ServerApiVersion } = require('mongodb');
 const app = express();
 app.use(express.json());
-const { ObjectId } = require('mongodb');
 
 // Configura la conexión a MongoDB
 const uri = "mongodb+srv://ialfper:ialfper21@alumnos.zoinj.mongodb.net/alumnos?retryWrites=true&w=majority";
