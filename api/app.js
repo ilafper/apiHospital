@@ -2,7 +2,7 @@ const express = require('express');
 const { MongoClient, ServerApiVersion } = require('mongodb');
 const app = express();
 app.use(express.json());
-const { MongoClient, ObjectId } = require('mongodb'); // ✅ Forma correcta
+
 // Configura la conexión a MongoDB
 const uri = "mongodb+srv://ialfper:ialfper21@alumnos.zoinj.mongodb.net/alumnos?retryWrites=true&w=majority";
 const client = new MongoClient(uri, {
@@ -181,29 +181,43 @@ app.post('/api/asignarCita', async (req, res) => {
   try {
     const { nombre, apellido, codigoPaciente, fecha } = req.body;
 
-    // Validación de campos requeridos
-    if (!nombre || !apellido || !codigoPaciente || !fecha) {
-      return res.status(400).json({ mensaje: 'Todos los campos son obligatorios' });
+    // 1. Validación básica
+    if (!ObjectId.isValid(codigoPaciente)) { // ✅ Método moderno para validar IDs
+      return res.status(400).json({ mensaje: 'ID de paciente inválido' });
     }
 
-    const { citas } = await connectToMongoDB();
+    const pacientes = req.db.collection('pacientes');
+    const citas = req.db.collection('citas');
 
-    const junto = nombre + " " + apellido;
+    // 2. Buscar paciente (con ObjectId convertido correctamente)
+    
+
+    if (!paciente) {
+      return res.status(404).json({ mensaje: 'Paciente no encontrado' });
+    }
+
+    // 3. Crear cita (con fecha convertida a Date)
     const nuevaCita = {
-      codigoPaciente: codigoPaciente,
-      Paciente: junto,
-      fecha: fecha,
-      asistio: "pendiente"
+      codigoPaciente: new ObjectId(codigoPaciente), // ✅ Correcto
+      nombrePaciente: `${nombre} ${apellido}`,
+      fecha: new Date(fecha),
+      estado: "pendiente",
+      createdAt: new Date() // 👈 Buena práctica: fecha de creación
     };
 
-    await citas.insertOne(nuevaCita);
+    const resultado = await citas.insertOne(nuevaCita);
 
-    
-    res.status(201).json({ mensaje: 'Cita asignada correctamente', cita: nuevaCita });
+    res.status(201).json({
+      mensaje: 'Cita creada exitosamente',
+      id: resultado.insertedId // 👈 Devuelve el ID generado
+    });
 
   } catch (error) {
-    console.error("Error al asignar la cita:", error);
-    res.status(500).json({ mensaje: 'Error al asignar la cita' });
+    console.error('Error detallado:', error);
+    res.status(500).json({ 
+      mensaje: 'Error al crear cita',
+      error: error.message // 👈 Devuelve el mensaje de error real
+    });
   }
 });
 
