@@ -2,6 +2,7 @@ const express = require('express');
 const { MongoClient, ServerApiVersion } = require('mongodb');
 const app = express();
 app.use(express.json());
+const { ObjectId } = require('mongodb');
 
 // Configura la conexión a MongoDB
 const uri = "mongodb+srv://ialfper:ialfper21@alumnos.zoinj.mongodb.net/alumnos?retryWrites=true&w=majority";
@@ -179,33 +180,30 @@ app.post('/api/crearPaciente', async (req, res) => {
 
 app.post('/api/asignarCita', async (req, res) => {
   try {
-    // Desestructurar los valores del body de la solicitud
-    const { codigoPaciente, nombrePaciente, fecha } = req.body;
+    const { nombre, apellido, codigoPaciente, fecha } = req.body;
 
-    // Verificar si los valores requeridos existen
-    if (!codigoPaciente || !nombrePaciente || !fecha) {
-      return res.status(400).json({ mensaje: 'Faltan datos requeridos' });
+    if (!nombre || !apellido || !codigoPaciente || !fecha) {
+      return res.status(400).json({ mensaje: 'Todos los campos son obligatorios' });
     }
 
-    // Conectar a la base de datos
     const { citas } = await connectToMongoDB();
 
-    // Crear el nuevo objeto de cita
+    // Crear objeto tipo Date y convertir a string corto como en terminal
+    const fechaFormateada = new Date(fecha).toLocaleDateString();
+
     const nuevaCita = {
-      codigoPaciente: codigoPaciente,
-      nombrePaciente: nombrePaciente,
-      fecha: fecha,
-      asistio: 'pendiente' // Por defecto la cita está pendiente
+      nombrePaciente: `${nombre} ${apellido}`,
+      fecha: fechaFormateada,
+      codigoPaciente: new mongodb.ObjectId(codigoPaciente), // Uso correcto sin desuso
+      asistio: "pendiente"
     };
 
-    // Insertar la cita en la base de datos
+    console.log("Cita a guardar:", nuevaCita);
     await citas.insertOne(nuevaCita);
 
-    // Enviar respuesta exitosa
-    res.status(201).json({ mensaje: 'Cita asignada exitosamente' });
+    res.status(201).json({ mensaje: 'Cita asignada correctamente', cita: nuevaCita });
   } catch (error) {
-    // Manejo de errores
-    console.error('Error al asignar cita:', error);
+    console.error("Error al asignar la cita:", error);
     res.status(500).json({ mensaje: 'Error al asignar la cita' });
   }
 });
