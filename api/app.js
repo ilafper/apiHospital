@@ -182,31 +182,33 @@ app.post('/api/asignarCita', async (req, res) => {
   try {
     const { nombre, apellido, codigoPaciente, fecha } = req.body;
 
+    // Validación de campos requeridos
     if (!nombre || !apellido || !codigoPaciente || !fecha) {
       return res.status(400).json({ mensaje: 'Todos los campos son obligatorios' });
     }
 
     const { citas } = await connectToMongoDB();
 
-    // Crear objeto tipo Date y convertir a string corto como en terminal
-    const fechaFormateada = new Date(fecha).toLocaleDateString();
-
+    const junto = nombre + " " + apellido;
     const nuevaCita = {
-      nombrePaciente: `${nombre} ${apellido}`,
-      fecha: fechaFormateada,
-      codigoPaciente: new mongodb.ObjectId(codigoPaciente), // Uso correcto sin desuso
+      codigoPaciente: codigoPaciente,
+      Paciente: junto,
+      fecha: fecha,
       asistio: "pendiente"
     };
 
-    console.log("Cita a guardar:", nuevaCita);
     await citas.insertOne(nuevaCita);
 
+    
     res.status(201).json({ mensaje: 'Cita asignada correctamente', cita: nuevaCita });
+
   } catch (error) {
     console.error("Error al asignar la cita:", error);
     res.status(500).json({ mensaje: 'Error al asignar la cita' });
   }
 });
+
+
 
 
 
