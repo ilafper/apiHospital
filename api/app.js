@@ -190,7 +190,7 @@ app.post('/api/asignarCita', async (req, res) => {
 
     const junto = nombre + " " + apellido;
     const nuevaCita = {
-      codigoPaciente: codigoPaciente,
+      codigoPaciente: new ObjectId(codigoPaciente),
       Paciente: junto,
       fecha: fecha,
       asistio: "pendiente"
