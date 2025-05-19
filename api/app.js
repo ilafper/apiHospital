@@ -2,8 +2,6 @@ const express = require('express');
 const { MongoClient, ServerApiVersion } = require('mongodb');
 const app = express();
 app.use(express.json());
-const cors = require('cors');
-app.use(cors());
 
 // Configura la conexión a MongoDB
 const uri = "mongodb+srv://ialfper:ialfper21@alumnos.zoinj.mongodb.net/alumnos?retryWrites=true&w=majority";
@@ -33,6 +31,12 @@ async function connectToMongoDB() {
   }
 }
 
+app.use((req, res, next) => {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  next();
+});
 
 // Endpoint GET para obtener usuarios
 app.get('/api/users', async (req, res) => {
