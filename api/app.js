@@ -2,7 +2,7 @@ const express = require('express');
 const { MongoClient, ServerApiVersion } = require('mongodb');
 const app = express();
 app.use(express.json());
-
+app.use(cors());
 // Configura la conexión a MongoDB
 const uri = "mongodb+srv://ialfper:ialfper21@alumnos.zoinj.mongodb.net/alumnos?retryWrites=true&w=majority";
 const client = new MongoClient(uri, {
