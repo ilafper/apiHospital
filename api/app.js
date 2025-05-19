@@ -202,13 +202,13 @@ app.post('/api/asignarCita', async (req, res) => {
     //   asistio: "pendiente"
     // }
 
-    let consulta=await citas.insertOne(nuevaCita);
+    await citas.insertOne(nuevaCita);
     
-    res.status(201).json({ mensaje: 'Cita asignada correctamente', cita: nuevaCita,respuesta:consulta.acknowledged });
+    res.status(201).json({ mensaje: 'Cita asignada correctamente', cita: nuevaCita});
 
   } catch (error) {
     console.error("Error al asignar la cita:", error);
-    res.status(500).json({ mensaje: 'Error al asignar la cita',respuesta:consulta.acknowledged });
+    res.status(500).json({ mensaje: 'Error al asignar la cita'});
   }
 });
 
