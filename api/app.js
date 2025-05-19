@@ -195,15 +195,20 @@ app.post('/api/asignarCita', async (req, res) => {
       fecha: fecha,
       asistio: "pendiente"
     };
+    let cita ={ 
+      codigoPaciente: new ObjectId(codigoPaciente),
+      Paciente: junto,
+      fecha: fecha,
+      asistio: "pendiente"
+    }
 
-    await citas.insertOne(nuevaCita);
-
+    let consulta=await citas.insertOne(nuevaCita);
     
-    res.status(201).json({ mensaje: 'Cita asignada correctamente', cita: nuevaCita });
+    res.status(201).json({ mensaje: 'Cita asignada correctamente', cita: nuevaCita,respuesta:consulta.acknowledged });
 
   } catch (error) {
     console.error("Error al asignar la cita:", error);
-    res.status(500).json({ mensaje: 'Error al asignar la cita' });
+    res.status(500).json({ mensaje: 'Error al asignar la cita',respuesta:consulta.acknowledged });
   }
 });
 
