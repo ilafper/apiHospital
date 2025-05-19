@@ -179,20 +179,20 @@ app.post('/api/crearPaciente', async (req, res) => {
 
 app.post('/api/asignarCita', async (req, res) => {
   try {
-    const { nombre, apellido, codigoPaciente, fecha } = req.body;
+    const { citaPaciente } = req.body;
 
-    // Validación de campos requeridos
-    if (!nombre || !apellido || !codigoPaciente || !fecha) {
-      return res.status(400).json({ mensaje: 'Todos los campos son obligatorios' });
-    }
+    // // Validación de campos requeridos
+    // if (!nombre || !apellido || !codigoPaciente || !fecha) {
+    //   return res.status(400).json({ mensaje: 'Todos los campos son obligatorios' });
+    // }
 
     const { citas } = await connectToMongoDB();
 
-    const junto = nombre + " " + apellido;
+    const junto = citaPaciente.nombre + " " + citaPaciente.apellido;
     const nuevaCita = {
-      codigoPaciente: codigoPaciente,
+      codigoPaciente:citaPaciente.codigoPaciente,
       Paciente: junto,
-      fecha: fecha,
+      fecha: citaPaciente.fecha,
       asistio: "pendiente"
     };
     let cita ={ 
