@@ -195,12 +195,12 @@ app.post('/api/asignarCita', async (req, res) => {
       fecha: citaPaciente.fecha,
       asistio: "pendiente"
     };
-    let cita ={ 
-      codigoPaciente: new ObjectId(codigoPaciente),
-      Paciente: junto,
-      fecha: fecha,
-      asistio: "pendiente"
-    }
+    // let cita ={ 
+    //   codigoPaciente: new ObjectId(codigoPaciente),
+    //   Paciente: junto,
+    //   fecha: fecha,
+    //   asistio: "pendiente"
+    // }
 
     let consulta=await citas.insertOne(nuevaCita);
     
