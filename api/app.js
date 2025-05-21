@@ -215,15 +215,15 @@ app.post('/api/vercitaspaciente', async (req, res) => {
     const { id } = req.body;
     const { citas } = await connectToMongoDB();
 
-    // ✅ await necesario para convertir el cursor en array
     const citasPaciente = await citas.find({ codigoPaciente: id }).toArray();
 
-    res.status(200).json(citasPaciente);
+    res.status(200).json(citasPaciente); // ✅ Devuelve el array directamente
   } catch (error) {
     console.error("Error al obtener las citas:", error);
     res.status(500).json({ mensaje: 'Error al obtener las citas del paciente' });
   }
 });
+
 
 
 
