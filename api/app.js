@@ -215,8 +215,8 @@ app.post('/api/vercitaspaciente', async (req, res) => {
     const { id } = req.body;
     const { citas } = await connectToMongoDB();
 
-    // Buscar citas donde el campo codigoPaciente coincida
-    const citasPaciente = citas.find({ codigoPaciente: id }).toArray();
+    // ✅ await necesario para convertir el cursor en array
+    const citasPaciente = await citas.find({ codigoPaciente: id }).toArray();
 
     res.status(200).json(citasPaciente);
   } catch (error) {
@@ -224,6 +224,7 @@ app.post('/api/vercitaspaciente', async (req, res) => {
     res.status(500).json({ mensaje: 'Error al obtener las citas del paciente' });
   }
 });
+
 
 
 
