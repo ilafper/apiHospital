@@ -180,13 +180,8 @@ app.post('/api/crearPaciente', async (req, res) => {
 app.post('/api/asignarCita', async (req, res) => {
   try {
     const { citaPaciente } = req.body;
-
-    // // Validación de campos requeridos
-    // if (!nombre || !apellido || !codigoPaciente || !fecha) {
-    //   return res.status(400).json({ mensaje: 'Todos los campos son obligatorios' });
-    // }
-
     const { citas } = await connectToMongoDB();
+
 
     const junto = citaPaciente.nombre + " " + citaPaciente.apellido;
     const nuevaCita = {
@@ -195,6 +190,7 @@ app.post('/api/asignarCita', async (req, res) => {
       fecha: citaPaciente.fecha,
       asistio: "pendiente"
     };
+
     // let cita ={ 
     //   codigoPaciente: new ObjectId(codigoPaciente),
     //   Paciente: junto,
@@ -213,6 +209,21 @@ app.post('/api/asignarCita', async (req, res) => {
 });
 
 
+
+app.post('/api/vercitaspaciente', async (req, res) => {
+  try {
+    const { id } = req.body;
+    const { citas } = await connectToMongoDB();
+
+    // Buscar citas donde el campo codigoPaciente coincida
+    const citasPaciente = citas.find({ codigoPaciente: id }).toArray();
+
+    res.status(200).json(citasPaciente);
+  } catch (error) {
+    console.error("Error al obtener las citas:", error);
+    res.status(500).json({ mensaje: 'Error al obtener las citas del paciente' });
+  }
+});
 
 
 
