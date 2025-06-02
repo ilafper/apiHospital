@@ -1,5 +1,5 @@
 const express = require('express');
-const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
+const { MongoClient, ServerApiVersion } = require('mongodb');
 const app = express();
 app.use(express.json());
 
@@ -131,10 +131,10 @@ app.post('/api/crearEspecialistas', async (req, res) => {
 
     // Crear el nuevo especialista
     const nuevoEspecialista = {
-      username,
-      apellido,
-      direccion,
-      especialidad
+      nombre:username,
+      apellido:apellido,
+      direccion:direccion,
+      especialidad:especialidad
     };
 
     await especialistas.insertOne(nuevoEspecialista);
@@ -209,15 +209,15 @@ app.post('/api/asignarCita', async (req, res) => {
 });
 
 
-
+/*api para ver las citas del paciente */
 app.post('/api/vercitaspaciente', async (req, res) => {
   try {
     const { id } = req.body;
     const { citas } = await connectToMongoDB();
-
+    /*buscar las citas por el id del codigo paciente*/
     const citasPaciente = await citas.find({ codigoPaciente: id }).toArray();
 
-    res.status(200).json(citasPaciente); // ✅ Devuelve el array directamente
+    res.status(200).json(citasPaciente); 
   } catch (error) {
     console.error("Error al obtener las citas:", error);
     res.status(500).json({ mensaje: 'Error al obtener las citas del paciente' });
