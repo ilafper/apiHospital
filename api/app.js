@@ -100,7 +100,7 @@ app.post('/api/checkLogin', async (req, res) => {
       if (rol === "admin") {
         res.json({ mensaje: "Bienvenido administrador", rol: "admin", nombre:usuarioEncontrado });
       } else if (rol === "administrativo") {
-        res.json({ mensaje: "Bienvenido administrativo", rol: "administrativo" });
+        res.json({ mensaje: "Bienvenido administrativo", rol: "administrativo", nombre:usuarioEncontrado });
       } else {
         res.status(400).json({ mensaje: "Rol no reconocido" });
       }
