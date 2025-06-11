@@ -96,7 +96,7 @@ app.post('/api/checkLogin', async (req, res) => {
     const usuarioEncontrado = await login.findOne({ usuario: nombre, contra: password });
 
     if (usuarioEncontrado) {
-      const rol = usuarioEncontrado.rol;
+      
       if (rol === "admin") {
         res.json({ mensaje: "Bienvenido administrador", rol: "admin", nombre:usuarioEncontrado });
       } else if (rol === "administrativo") {
