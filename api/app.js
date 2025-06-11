@@ -136,7 +136,7 @@ app.post('/api/crearEspecialistas', async (req, res) => {
       direccion:direccion,
       especialidad:especialidad
     };
-
+    
     await especialistas.insertOne(nuevoEspecialista);
 
     res.status(201).json({ mensaje: "Especialista creado correctamente" });
