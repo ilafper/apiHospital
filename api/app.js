@@ -96,10 +96,11 @@ app.post('/api/checkLogin', async (req, res) => {
     const usuarioEncontrado = await login.findOne({ usuario: nombre, contra: password });
 
     if (usuarioEncontrado) {
+
       if (rol === "admin") {
-        res.json({ mensaje: "Bienvenido administrador", rol: "admin", nombre:"sss"});
+        res.json({rol: "admin", nombre:"ññ"});
       } else if (rol === "administrativo") {
-        res.json({ mensaje: "Bienvenido administrativo", rol: "administrativo", nombre:"aa"});
+        res.json({rol: "administrativo", nombre:"pp"});
       } else {
         res.status(400).json({ mensaje: "Rol no reconocido" });
       }
