@@ -182,10 +182,8 @@ app.post('/api/crearPaciente', async (req, res) => {
 
 app.post('/api/asignarCita', async (req, res) => {
   try {
-    const citaPaciente = req.body; // <-- Corrección aquí: req.body ya es el objeto que necesitas
+    const citaPaciente = req.body;
 
-    // Si quieres ser más explícito y desestructurar los campos individuales:
-    // const { nombre, apellido, codigoPaciente, fecha } = req.body;
 
     const { citas } = await connectToMongoDB();
 
