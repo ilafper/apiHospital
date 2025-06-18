@@ -2,6 +2,7 @@ const express = require('express');
 const { MongoClient, ServerApiVersion } = require('mongodb');
 const app = express();
 app.use(express.json());
+const { ObjectId } = require('mongodb'); 
 
 // Configura la conexión a MongoDB
 const uri = "mongodb+srv://ialfper:ialfper21@alumnos.zoinj.mongodb.net/alumnos?retryWrites=true&w=majority";
@@ -220,6 +221,38 @@ app.post('/api/vercitaspaciente', async (req, res) => {
   }
 });
 
+// Asegúrate de importar ObjectId si usas MongoDB
+
+
+
+
+app.put('/api/citas/:id', async (req, res) => {
+    try {
+        const { id } = req.params; // Obtiene el ID de la URL
+        const { asistio } = req.body; // Obtiene el nuevo estado de 'asistio' del cuerpo
+
+        if (!ObjectId.isValid(id)) {
+            return res.status(400).json({ mensaje: 'ID de cita inválido.' });
+        }
+
+        const { citas } = await connectToMongoDB(); // Tu función para conectar a la DB
+
+        const resultado = await citas.updateOne(
+            { _id: new ObjectId(id) }, // Busca la cita por su ID
+            { $set: { asistio: asistio } } // Actualiza solo el campo 'asistio'
+        );
+
+        if (resultado.matchedCount === 0) {
+            return res.status(404).json({ mensaje: 'Cita no encontrada.' });
+        }
+
+        res.status(200).json({ mensaje: 'Cita actualizada correctamente.', idActualizado: id });
+
+    } catch (error) {
+        console.error("Error al actualizar la cita:", error);
+        res.status(500).json({ mensaje: 'Error interno del servidor al actualizar la cita.' });
+    }
+});
 
 
 
