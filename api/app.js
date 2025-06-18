@@ -194,13 +194,6 @@ app.post('/api/asignarCita', async (req, res) => {
       asistio: "pendiente"
     };
 
-    // let cita ={ 
-    //   codigoPaciente: new ObjectId(codigoPaciente),
-    //   Paciente: junto,
-    //   fecha: fecha,
-    //   asistio: "pendiente"
-    // }
-
     await citas.insertOne(nuevaCita);
     
     res.status(201).json({ mensaje: 'Cita asignada correctamente', cita: nuevaCita});
