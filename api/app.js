@@ -239,12 +239,8 @@ app.put('/api/citas/:id', async (req, res) => {
 
         const resultado = await citas.updateOne(
             { _id: new ObjectId(id) }, // Busca la cita por su ID
-            { $set: { asistio: asistio } } // Actualiza solo el campo 'asistio'
+            { $set: { asistio: asistio } } 
         );
-
-        if (resultado.matchedCount === 0) {
-            return res.status(404).json({ mensaje: 'Cita no encontrada.' });
-        }
 
         res.status(200).json({ mensaje: 'Cita actualizada correctamente.', idActualizado: id });
 
