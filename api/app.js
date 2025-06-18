@@ -73,6 +73,9 @@ app.get('/api/pacientes', async (req, res) => {
   }
 });
 
+
+
+
 // Endpoint GET para obtener especialistas
 app.get('/api/especialistas', async (req, res) => {
   try {
@@ -131,10 +134,10 @@ app.post('/api/crearEspecialistas', async (req, res) => {
 
     // Crear el nuevo especialista
     const nuevoEspecialista = {
-      nombre:username,
-      apellido:apellido,
-      direccion:direccion,
-      especialidad:especialidad
+      username,
+      apellido,
+      direccion,
+      especialidad
     };
 
     await especialistas.insertOne(nuevoEspecialista);
