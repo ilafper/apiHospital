@@ -182,28 +182,30 @@ app.post('/api/crearPaciente', async (req, res) => {
 
 app.post('/api/asignarCita', async (req, res) => {
   try {
-    const { citaPaciente } = req.body;
-    const { citas } = await connectToMongoDB();
+    const citaPaciente = req.body; // <-- Corrección aquí: req.body ya es el objeto que necesitas
 
+    // Si quieres ser más explícito y desestructurar los campos individuales:
+    // const { nombre, apellido, codigoPaciente, fecha } = req.body;
+
+    const { citas } = await connectToMongoDB();
 
     const junto = citaPaciente.nombre + " " + citaPaciente.apellido;
     const nuevaCita = {
-      codigoPaciente:citaPaciente.codigoPaciente,
+      codigoPaciente: citaPaciente.codigoPaciente,
       Paciente: junto,
       fecha: citaPaciente.fecha,
       asistio: "pendiente"
     };
 
     await citas.insertOne(nuevaCita);
-    
-    res.status(201).json({ mensaje: 'Cita asignada correctamente', cita: nuevaCita});
+
+    res.status(201).json({ mensaje: 'Cita asignada correctamente', cita: nuevaCita });
 
   } catch (error) {
     console.error("Error al asignar la cita:", error);
-    res.status(500).json({ mensaje: 'Error al asignar la cita'});
+    res.status(500).json({ mensaje: 'Error al asignar la cita' });
   }
 });
-
 
 /*api para ver las citas del paciente */
 app.post('/api/vercitaspaciente', async (req, res) => {
